@@ -9,7 +9,7 @@ This code is known as **shellcode**, because traditionally its function was to t
 - On Windows systems, it typically involved a call to the $system("command.exe")$ function (or $"cmd.exe"$ on older systems) to run the DOS Command shell.
 
 **Shellcode** then is simply machine code, a series of binary values corresponding to the machine instructions and data values that implement the attacker’s desired functionality. This means shellcode is specific to a particular processor architecture, and indeed usually to a specific operating system, as it needs to be able to run on the targeted system and interact with its system functions. This is the major reason why buffer overflow attacks are usually targeted at a specific piece of software running on a specific operating system. Because shellcode is machine code, writing it traditionally required a good understanding of the assembly language and operation of the targeted system. Indeed, many of the classic guides to writing shellcode, including the original [LEVY96], assumed such knowledge. However, more recently a number of sites and tools have been developed that automate this process (as indeed has occurred in the development of security exploits generally), thus making the development of shellcode exploits available to a much larger potential audience. One site of interest is the Metasploit Project, which aims to provide useful information to people who perform penetration testing, IDS signature development, and exploit research. It includes an advanced open-source platform for developing, testing, and using exploit code, which can be used to create shellcode that performs any one of a variety of tasks and that exploits a range of known buffer overflow vulnerabilities.
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 
 #### 2. Discuss the following defenses against stack overflow: random canary, Stackshield and Return Address Defender, stack space randomization, guard pages, executable address space protection
 
@@ -27,7 +27,7 @@ All these solutions needs recompiling the code
   - value needs to be unpredictable
   - should be different on different systems
   - changes the structure of the stack, which could be problematic for debuggers
-- **Stacshield and Return Address Defender (RAD)**: include additional function entry and exit code (also in some GCC extensions)
+- **Stackshield and Return Address Defender (RAD)**: include additional function entry and exit code (also in some GCC extensions)
 
   - function **entry** writes a **copy of the return address** to a safe region of memory.
   - function **exit** code **checks the return address** in the stack frame against the saved copy.
@@ -51,13 +51,13 @@ All these solutions needs recompiling the code
 
 ---
 
-#### 3.  Explain the relationship between software security, quality and reliability
+### 3.  Explain the relationship between software security, quality and reliability
 
-Software security is closely related to **softare quality** and **reliability**, but with subtle differences. Software quality and reliability is concerned with the accidental failure of a program as a result of some theretically random, unanticipated input, system interaction, or use of incorrect code.
+Software security is closely related to **softare quality** and **reliability**, but with subtle differences. Software quality and reliability is concerned with the accidental failure of a program as a result of some theoretically random, unanticipated input, system interaction, or use of incorrect code.
 
 These failures are expected to follow some form of probability distribution. The usual approach to improve software quality is to use some form of structured design and testing to identify and eliminate as many bugs as is reasonably possible from a program. The testing usually involves variations of likely inputs and common errors, with the intent of minimizing the number of bugs that would be seen in general use. **The concern is not the total number of bugs in a program, but how often they are triggered, resulting in program failure**. 
 
-Software security differs in that the attacker chooses the probability distribution, targeting specific bugs that result in a failure that can be exploited by the attacker. These bugs may often be triggered by inputs that differ dramatically from what is usually expected, and hence are unlikely to be identified by common testing approaches. Writing secure, safe code requires attention to all aspects of how a program executes, the environment it executes in, and the type of data it processes. Nothing can be assumed, and all potential errors must be checked. These issues are highlighted in the following definition:
+**Software security** differs in that the attacker chooses the probability distribution, targeting specific bugs that result in a failure that can be exploited by the attacker. These bugs may often be triggered by inputs that differ dramatically from what is usually expected, and hence are unlikely to be identified by common testing approaches. Writing secure, safe code requires attention to all aspects of how a program executes, the environment it executes in, and the type of data it processes. Nothing can be assumed, and all potential errors must be checked. These issues are highlighted in the following definition:
 
 - **Defensive** or **Secure Programming** is the process of designing and implementing software so it continues to function even when under attack. Software written using this process is able to detect erroneous conditions resulting from some attack, and to either continue executing safely, or to fail gracefully. The key rule in defensive programming is to never assume anything, but to check all assumptions and to handle any possible error states.
 
@@ -65,7 +65,7 @@ This definition emphasizes the need to make explicit any assumptions about how a
 
 ---
 
-#### 4. Discuss the best practices for defense programming
+### 4. Discuss the best practices for defense programming
 
 **Defensive programming** is an approach to software design and implementation that aims to ensure the software continues to function predictably and gracefully, even when facing unexpected inputs, environmental conditions, or attacks. It's often referred to as secure programming.
 
@@ -83,6 +83,7 @@ The key best practices for defensive programming are the following:
      - Use regular expressions to validate input and reject shell meta-characters to prevent **OS Command Injection**.
      - Use **prepared statements** or functions like $mysql_real_escape_string()$ to sanitize input, preventing **SQL injection**.
      - Filter output to prevent **Cross-Site Scripting (XSS)** attacks, which occur when user-supplied
+
 2. **Secure Code Implementation**
 
 - **Correct Algorithm Implementation**: Ensure the algorithm handles all problem variants correctly to prevent exploitable bugs. This includes avoiding unintended code, such as debug code left in production, that could bypass security checks.
@@ -92,7 +93,7 @@ The key best practices for defensive programming are the following:
 3. **Interacting with the Operating System (OS)**
 
 - **Priciple of least privilege**: Run programs with the least privilege needed to complete their function.
-  - Determine the minimal user and groupd required
+  - Determine the minimal user and group required
   - Programs requiring root/administrator privileges should drop those privileges after initial tasks are complete, running the majority of their code as a normal user.
 - **Manage Environment Variables**: Treat environment variables (like $PATH$ or $LD_LIBRARY_PATH$) as another source of untrusted input. For privileged programs, these must be explicitly reset to "safe" values or their use prevented to avoid attacks like environment variable manipulation in shell scripts.
 - **Handle System Calls Safely**: Do not make incorrect assumptions about the operations of system calls or standard library functions, especially regarding resource optimization, as these can conflict with security goals (e.g., in file shredding).
@@ -116,7 +117,7 @@ The key best practices for defensive programming are the following:
 
 ---
 
-#### 5. Explain the concept of operating system hardening and its main steps
+### 5. Explain the concept of operating system hardening and its main steps
 
 Operating system hardening is the first critical step in securing a system and consists in securing the base operating system.
 
@@ -127,13 +128,12 @@ The basic steps are:
   - Removing unnecessary services, applications, and protocols
   - Configuring users, groups, and permissions
   - Configuring resource controls
-- Install and configure additional security controls, such as anti-virus, host-based firewalls, and intrusion
-  detection system (IDS)
+- Install and configure additional security controls, such as anti-virus, host-based firewalls, and intrusion detection system (IDS)
 - Test the security of the basic operating system to ensure it addresses adequately the security needs
 
 ---
 
-#### 6. Explain the following protection methods: system call filtering, sandbox, code signing, compile-based/language-based protection.
+### 6. Explain the following protection methods: system call filtering, sandbox, code signing, compile-based/language-based protection.
 
 ##### System Call Filtering
 
@@ -183,15 +183,15 @@ High level programming languages enforce protection mechanisms in the generated 
 
 ---
 
-#### 7. Discuss the security concerns about virtualization.
+### 7. Discuss the security concerns about virtualization.
 
 ##### Definition
 
-**Virtualization** is a techbology that provides an abstraction of the resources used by some software which runs in a simulated environment called a virtual machine (VM).
+**Virtualization** is a technology that provides an abstraction of the resources used by some software which runs in a simulated environment called a virtual machine (VM).
 Benefits include:
 
 - better efficiency in the use of physical system resources
-- isolation of different OS/SW systems over the same Hardware (of interest for security
+- isolation of different OS/SW systems over the same Hardware (of interest for security)
 - simplified management of OS (restart, migration, checkpointing, cloning, etc.
 
 Virtualization proviedes support for multiple distinct operating systems and associated applications on one physical system.
@@ -199,7 +199,7 @@ Virtualization proviedes support for multiple distinct operating systems and ass
 Virtualization abstracts the hardware of computer into several "virtual" computers (virtual machines):
 
 - Each virtual computer (in general) identical to the underlying one
-- It provides as independet execution environment in which an operating system (but even an application) can run
+- It provides an independet execution environment in which an operating system (but even an application) can run
 - A single physicial computer can host multiple operating systems, each in its own virtual machine
 
 Analogy with the layers of an operating system:
@@ -247,7 +247,7 @@ Virtualized environments may improve security:
 
 - However, vulnerabilities in the hypervisor itself may severely reduce security
 - Attackers may exploit these vulnerabilities to take over a number of guests OSs
-- This is known as VM escape
+- This is known as **VM escape**
 
 2. Virtualized systems ofted provide support for suspending an executing guest OS in a shanpshot, saving that image, and then restarting executing at a later time, possibly even on another system.
    - Attacks can be directed to modify this image, to compromise the security of the data and programs contained within it
@@ -275,7 +275,7 @@ The hypervisor should be secured using a process similar to securing an operatin
 - Monitored for any signs of compromise
 - Accessed only by authorized administration
 - Tested for security
-  May support both local and remote administration so must be configured appropriately.
+- May support both local and remote administration so must be configured appropriately.
 
 Remote administration access should be considered and secured in the design of any network firewall and IDS capability in use.
 
@@ -308,7 +308,7 @@ Three ways to achieve this;
 
 ---
 
-#### 8. Figure 6.1 fgets buffer overflow
+### 8. Figure 6.1 fgets buffer overflow
 
 ![1762253350786](image/Part3/1762253350786.png)
 
@@ -358,7 +358,7 @@ The execution output shows a "Segmentation fault (core dumped)" when the input i
 
 To fix this vulnerability, one must use a safe string function that respects the buffer size:
 
-- replace `sprintf(tmp, "read : %s\n", val);` with `snprintf (safe, size-aware version)` (safe, size-aware version):
+- replace `sprintf(tmp, "read : %s\n", val);` with `snprintf` (safe, size-aware version):
 
   `snprintf(tmp, sizeof(tmp), "read : %s\n", val);`
 
@@ -385,8 +385,7 @@ With growing awareness of problems with buffer overflows on the stack and the de
 The heap is typically located above the program code and global data and grows up in memory (while the stack grows down toward it). Memory is requested from the heap by programs for use in dynamic data structures, such as linked lists of records.
 If such a record contains a buffer vulnerable to overflow, the memory following it can be corrupted.
 
-Unlike the stack, there will not be return addresses here to easily cause a transfer of control. However, if the allocated space includes a pointer to a
-function, which the code then subsequently calls, an attacker can arrange for this address to be modified to point to shellcode in the overwritten buffer. Typically, this might occur when a program uses a list of records to hold chunks of data while processing input/output or decoding a compressed image or video file. As well as holding the current chunk of data, this record may contain a pointer to the function processing this class of input (thus allowing different categories of data chunks to be processed by the one generic function). Such code is used and has been successfully attacked.
+Unlike the stack, there will not be return addresses here to easily cause a transfer of control. However, if the allocated space includes a pointer to a function, which the code then subsequently calls, an attacker can arrange for this address to be modified to point to shellcode in the overwritten buffer. Typically, this might occur when a program uses a list of records to hold chunks of data while processing input/output or decoding a compressed image or video file. As well as holding the current chunk of data, this record may contain a pointer to the function processing this class of input (thus allowing different categories of data chunks to be processed by the one generic function). Such code is used and has been successfully attacked.
 
 As an example, considering the Figure this declares a structure containing a buffer and a function pointer.
 Consider the lines of code shown in the `main()` routine.
@@ -643,7 +642,7 @@ Entirely implemented in the firmware of the CPU
 - Commonly used in datacenters
 - Often viewed as the operating systems of the datacenters
 - In some cases they are special purpose operating systems that run over bare metal
-  - Do not offer system calls to upper layers rather, theu offer functionalities to create and manage virtual machines
+  - Do not offer system calls to upper layers rather, they offer functionalities to create and manage virtual machines
 - In others they are general purpose operating systems also offering virtualization capabilities
   - Typically they are less powerfull and offers less features than dedicated type 1 Hypervisors
   - Trap guest OSs as user-level processes
@@ -673,7 +672,8 @@ They have severe **limitations**:
 - The virtual machine is executed without any special privileges
 - In some cases do not even take advantage of specific HW features for virtualization
 - Tend to have very poor performances
-  They have also have **advantages**:
+
+They have also have **advantages**:
 - They do not require any change to the hosting OS
 - Easy to deploy and use
 
@@ -745,7 +745,7 @@ This is known as **trap-and-emulate** used by most virtualization systems
 
 ![1762424726238](image/Part3/1762424726238.png)
 
-**Real rime migration** is an advantage ofOS installed on virtual machines that cannot be offerd by OS on a physical machine.
+**Real rime migration** is an advantage of OS installed on virtual machines that cannot be offerd by OS on a physical machine.
 
 An entire guest can be duplicated on another physical machine or on another virtual machine without interrupting the guest OS and its applications.
 
