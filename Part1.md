@@ -107,7 +107,7 @@ Properties of a one-way hash function `H`:
 
 ---
 
-#### 4. Explain the meaning of "multifactor authentication" and provide relevant example
+#### 4. Explain the meaning of "multifactor authentication" and provide relevant examples
 
 
 ![](image/Part1/MFA.png)
@@ -144,6 +144,27 @@ Password crackers exploit predictable human behaviour (weak, common or short pas
    - The processing capacity available for password cracking has increased dramatically.
    - The use of sophisticated algorithms to generate potential passwords.
    - Studying examples and structures of actual passwords in use.
+
+---
+#### 6. Discuss the policies to strength the password management and how they can be enforced (proactive password checking, complex password policy, etc.) 
+
+Modern approaches to strength the password include the complex password policy that consists in forcing users to pick stronger passwords.
+
+**Password selection strategies**
+- **User education**: users can be told the importance of using hard to guess passwords and can be provided with guidelines for selecting strong passwords.
+- **Computer generated passwords**: users have trouble remembering them.
+- **Reactive password checking**: system periodically runs its own password cracker to find guessable passwords.
+- **Complex password policy**: User is allowed to select his own password, but the system checks if the password is allowable. If not, rejects it. Goal is to eliminate guessable passwords while allowing the user to select password easy to remember.
+
+**Proactive password checking**
+- **Rule enforcement**: specific rules that passwords must adhere to.
+- **Password checker**: compiler a large dictionary of "bad" passwords not to use.
+- But how to make a fast password check?
+  - Bloom filter, used to implement password checkers
+  - Exploits k hash functions to build tables of hash values
+  - Check desired password against this table
+  - It's probabilistic, efficient way to check if a password is in the dictionary of forbidden
+
 
 ---
 
@@ -541,6 +562,70 @@ Some figures about this system are of interest:
 
 ---
 
+### 15. Discuss the Unix model for access control
+
+**UNIX files are administered using inodes (index nodes)**
+- Control structures with key information needed for a particular file
+- Several file names may be associated with a single inode
+- An active inode is associated with exactly one file
+- File attributes, permissions and control information are stored in the inode
+- On the disk there is an inode table, or inode list, that contains the inodes of all files in the file system
+- When a file is opened its node is brought into main memory and stored in a memory-resident inode table
+
+**Directories are structured in a hierarchical tree**
+- May contain files and/or other directories
+- Containes file names plus pointers to associated inodes
+
+**Traditional Unix file access control**
+
+A user (a subject):
+- associated to a unique user identification number (user ID)
+- member of a primary group identified by a group ID
+- may also belong to several other groups
+
+A file (an object):
+- has a owner & group
+- 12 protection bits
+  - specify read, write, and execute permission for the owner of the file, members of the group and all other users
+- the owner ID, group ID, and protection bits are part of the file's inode
+
+![1767029081459](image/Part1/1767029081459.png)
+
+
+A hierarchy:
+owner - group - all others
+
+Concerning directories:
+- read grants the "list" capability
+- Write grants the create/rename/delete files capability
+- Execute grants the ability to descend into subdirectories
+
+- "Set user ID" (SetUID) and "Set group ID" (SetGID)
+  - System teporarily uses rights of the file owner/group in addiction to the real user's rights when making access control decisions
+  - Enables privileged programs to access files/resources not generally accessible
+ 
+- Sticky bit
+  - When applied to a directory it specifies that only the owner of any file in the directory can rename, move or delete that file
+  - Useful for shared directories
+
+- Superuser
+  - A specific User ID
+  - Is exempt from usual access control restrictions
+  - Has system-wide accesses
+
+**Access control lists(ACL) in Unix**
+
+- Modern UNIX systems support ACLs: FreeBSD, openBSD, Linux, Solaris
+- FreeBSD
+  - The administrator can assign a list of UNIX user IDs and groups by means of the Setfacl command
+  - Any number of users and groups can be associated with a file, each with read, write, execute protection bits
+  - A file does not need to have an ACL: includes an additional protection bit that indicates wheter the file has an extended ACL
+
+- When a process requests access to a file system object two steps are performed:
+  1. Selects the appropriate ACL
+  2. Checks if the matching entry contains sufficient permissions
+
+---
 #### IMAGES
 
 ### 14.
@@ -782,6 +867,58 @@ An implemented system for authentication will differ from or be more complex tha
 
 ---
 
+### 22. Password vulnerabilities
+
+![1767029915713](image/Part1/1767029915713.png)
+
+1. **Technical & brute force attacks**
+These attacks rely on computing power and databases rather than interacting with the user directly.
+  - **Offline Dictionary Attack**
+
+    - What it is: In this scenario, an attacker has managed to steal a file containing encrypted (hashed) passwords from a server. Because they have the file on their own computer ("offline"), they can try millions of words from a dictionary every second to see if they match the stolen hashes, without triggering account lockouts or alarms.
+
+    - Why it works: Many users choose simple dictionary words as passwords.
+
+  - **Specific Account Attack**
+    - What it is: Instead of trying to hack everyone, the attacker focuses their efforts on one high-value target (like a System Administrator or CEO).
+    - Why it works: It allows the attacker to dedicate more time and resources to a single, valuable entry point.
+
+  - **Popular Password Attack**
+    - What it is: Often called "Credential Spraying." The attacker tries a few very common passwords (like 123456, password, or qwerty) against a large list of usernames.
+    - Why it works: Statistically, in any large company, someone is using one of these weak passwords.
+
+1. **Targeted & Social Attacks**
+
+These methods move closer to the specific user, relying on personal information or direct access.
+
+  - **Password Guessing Against Single User**
+    - What it is: The attacker tries to guess a specific user's password based on personal information they can find online (social media, public records).
+    - Examples: Trying birthdays, pet names, children's names, or favorite sports teams.
+
+  - **Workstation Hijacking**
+    - What it is: This occurs when an attacker gains control of a user's computer while they are already logged in. This can happen physically (e.g., you walk away from your unlocked desk) or digitally (via malware/trojans that allow remote control).
+    - Why it works: It bypasses the need for a password entirely because the active session is already authenticated.
+
+3. **Exploiting Human Behavior**
+
+The final stages of the diagram focus on how user negligence helps attackers expand their reach.
+
+  - **Exploiting User Mistakes**
+    - What it is: Taking advantage of poor security hygiene.
+    - Examples: Finding a password written on a sticky note under a keyboard, "shoulder surfing" (watching someone type their password), or tricking a user into revealing their password via a phishing email.
+
+  - **Exploiting Multiple Password Use** (Password Reuse)
+    - What it is: This is one of the most critical vulnerabilities. If a user utilizes the same password for Facebook, their work email, and their banking, an attacker only needs to crack one to access all of them.
+    - Why it works: Once an attacker finds a working password, they immediately try it on other popular services.
+
+4. **Surveillance**
+  - **Electronic Monitoring**
+  - What it is: This involves using spyware or hardware devices to capture passwords as they are typed or transmitted.
+  - Examples:
+    - Keyloggers: Software that records every keystroke.
+    - Packet Sniffing: Intercepting data traveling over an unsecured Wi-Fi network.
+---
+
 ### 23. The Use of Hashed Passwords
 
 
@@ -808,6 +945,39 @@ There are two threats to the UNIX password scheme.
 2. In addition, if an opponent is able to obtain a copy of the password file, then a cracker program can be run on another machine at leisure. This enables the opponent to run through millions of possible passwords in a reasonable period.
 
 ---
+
+### 23. Actual biometric measurement operating characteristic curves
+
+![1767030570063](image/Part1/1767030570063.png)
+
+This chart is a technical visualization used to compare the performance and accurcy of different biometric authentication methods (Face, Fingerprint, Voide, Hand, and Iris).
+
+1. **The Axes: Balancing Errors**
+The graph plots two types of errors against each other on a logarithmic scale. This visualization helps determine how "good" a biometric system is.
+   - **X-Axis (False Match Rate)**: Labeled "Imposter that corresponds".
+       -  This represents the security risk. It is the percentage of times an unauthorized person (imposter) is incorrectly accepted by the system.
+
+       - Lower values (further left) are better for security.
+
+   - **Y-Axis (False Non-match Rate)**: Labeled "Genuine user not recognized".
+     -  This represents inconvenience. It is the percentage of times a legitimate user is incorrectly rejected by the system.
+     -  Lower values (further down) are better for usability.
+
+2. **Interpreting the Curves**
+
+The goal of any biometric system is to be as close to the bottom-left corner as possible, where both the False Match Rate and False Non-match Rate are zero.
+   - **Iris (Blue Diamond)**: This is the most accurate method shown. It is represented by a single point on the far left, indicating an extremely low False Match Rate (around 0.0001%) while maintaining a low False Non-match Rate. This suggests it is highly secure and accurate.
+   - **Fingerprint (White Circles)**: This curve is relatively flat and low, sitting below the Face and Voice curves. This indicates it is a strong performer, maintaining a low error rate for genuine users even as security settings are tightened.
+   - **Hand Geometry (White Diamonds)**: This performs moderately well, generally sitting between fingerprints and voice/face recognition in terms of accuracy.
+   - **Voice (Black Squares) and Face (Blue Dots)**: These curves are higher and further to the right. This indicates they are less accurate in this comparison. To achieve a secure low False Match Rate (moving left on the X-axis), these systems are forced to reject a very high number of genuine users (spiking up on the Y-axis).
+
+1. **Key Takeaway: The Trade-off**
+
+Systems operate on a threshold that can be adjusted.
+   - **Moving Left**: If you increase the threshold to make the system more secure (lower False Match Rate), you inevitably move up the curve, making it less convenient (higher Genuine User Rejection).
+   - **Moving Right**: If you decrease the threshold to make it more convenient, you move down the curve but increase the risk of imposters getting in.
+
+**In summary**: The image illustrates that Iris and Fingerprint technologies generally offer a better balance of security and convenience (lower error rates) compared to Face and Voice recognition for the data presented in the lecture.
 
 ### 24. Basic challenge-response protocols for Remote User Authentication
 
@@ -900,3 +1070,80 @@ The picture illustrates in a logical architecture the essential components of an
 
 It is clear from the logical architecture that there are four independent sources of information used for the access control decision. The system designer can decide
 which attributes are important for access control with respect to subjects, objects, and environmental conditions. The system designer or other authority can then define access control policies, in the form of rules, for any desired combination of attributes of subject, object, and environmental conditions. It should be evident that this approach is very powerful and flexible. However, the cost, both in terms of the complexity of the design and implementation, and in terms of the performance impact, is likely to exceed that of other access control approaches. This is a trade-off that the system authority must make.
+
+### 30. ACL and ABAC relationships
+
+![1767085283640](image/Part1/1767085283640.png)
+
+![1767085302458](image/Part1/1767085302458.png)
+
+** The **root of trust** is essentially the answer to the question: "Who is the ultimate authority that decides if a user is safe or allowed to do something?"
+
+It is the foundational source that the system relies on to ensure security rules are valid. If you cannot trust this "root," you cannot trust any decision the system makes.
+
+- With ACLs the **root of trust** is with the object owner:
+  - who ultimately enforces the object access rules by provisioning access to the object through addition of a user to an ACL.
+- In ABAC, **the root of trust** is derived from many sources of which the object owner has no control.
+  - ...such as Subject Attribute Authorities, Policy Developers and Credential Issuers.
+
+Hence the standard (SP 800-162) recommend to form an enterprise governance body, to manage:
+- identities,
+- credentials,
+- access management capability deployment operation
+
+Additionally, the standards recommend to develop a trust model:
+- to illustrate the trust relationships
+- to determine ownership and liability of information and services
+- to determine needs for additional policy and governance,
+- …
+
+### 31. Key functions in identity management
+
+![1767086496231](image/Part1/1767086496231.png)
+
+The picture provides an overview of the logical components of an ICAM (Identity, Credential and Access Management) architecture.
+- ICAM is a comprehensive approach to managing and implementing digital identities, credentials and access control
+- Developed by the U.S. government
+- Designed to:
+  - Create trusted digital identity representations of individuals and nonperson entities (NPEs)
+  - Bind identities to credentials
+    - that serve as a proxy for individuals or NPE in access transactions
+    - A credential is an object or data structure that authoritatively binds an identity to a token possessed and controlled by a subscriber
+  - Use the credentials to provide authorized access to an agency’s resources
+
+**Identity management**
+
+Identity management is concerned with assigning attributes to a digital identity and connecting that digital identity to an individual or NPE. The goal is to establish a trustworthy digital identity that is independent of a specific application or context. The traditional, and still most common, approach to access control for applications and programs is to create a digital representation of an identity for the specific use of the application or program. As a result, maintenance and protection of the identity itself is treated as secondary to the mission associated with the application. ­Further, there is considerable overlap in effort in establishing these application-specific identities.
+
+Unlike accounts used to log on to networks, systems, or applications, enterprise identity records are not tied to job title, job duties, location, or whether access is needed to a specific system. Those items may become attributes tied to an enterprise identity record, and may also become part of what uniquely identifies an individual in a specific application. Access control decisions will be based on the context and relevant attributes of a user—not solely their identity. The concept of an enterprise identity is that individuals will have a single digital representation of themselves that can be lever-aged across departments and agencies for multiple purposes, including access control.
+
+The figure depicts the key functions involved in identity management. Establishment of a digital identity typically begins with collecting identity data as part of an enrollment process. A digital identity is often comprised of a set of attributes that when aggregated uniquely identify a user within a system or an enterprise. In order to establish trust in the individual represented by a digital identity, an agency may also conduct a background investigation. Attributes about an individual may be stored in various authoritative sources within an agency and linked to form an enterprise view of the digital identity. This digital identity may then be provisioned into applications in order to support physical and logical access (part of Access Management) and ­de-provisioned when access is no longer required.
+
+A final element of identity management is lifecycle management, which includes the following:
+  - Mechanisms, policies, and procedures for protecting personal identity information
+  - Controlling access to identity data
+  - Techniques for sharing authoritative identity data with applications that need it
+  - Revocation of an enterprise identity
+
+**Credential Management**
+
+As mentioned, a credential is an object or data structure that authoritatively binds an identity (and optionally, additional attributes) to a token possessed and controlled by a subscriber. Examples of credentials are smart cards, private/public cryptographic keys, and digital certificates. Credential management is the management of the life cycle of the credential. Credential management encompasses the following five logical components:
+
+1. An authorized individual sponsors an individual or entity for a credential to establish the need for the credential. For example, a department supervisor sponsors a department employee.
+2. The sponsored individual enrolls for the credential, a process which typically consists of identity proofing and the capture of biographic and biometric data. This step may also involve incorporating authoritative attribute data, maintained by the identity management component.
+3. A credential is produced. Depending on the credential type, production may involve encryption, the use of a digital signature, the production of a smartcard, or other functions.
+4. The credential is issued to the individual or NPE.
+5. Finally, a credential must be maintained over its life cycle, which might include revocation, reissuance/replacement, reenrollment, expiration, personal identification number (PIN) reset, suspension, or reinstatement.
+
+**Access Management**
+
+The access management component deals with the management and control of the ways entities are granted access to resources. It covers both logical and physical access, and may be internal to a system or an external element. The purpose of access management is to ensure that the proper identity verification is made when an individual attempts to access security-sensitive buildings, computer systems, or data. The access control function makes use of credentials presented by those requesting access and the digital identity of the requestor. Three support elements are needed for an enterprise-wide access control facility:
+- **Resource management**: This element is concerned with defining rules for a resource that requires access control. The rules would include credential requirements and what user attributes, resource attributes, and environmental conditions are required for access of a given resource for a given function.
+- **Privilege management**: This element is concerned with establishing and maintaining the entitlement or privilege attributes that comprise an individual’s access profile. These attributes represent features of an individual that can be used as the basis for determining access decisions to both physical and logical resources. Privileges are considered attributes that can be linked to a digital identity.
+- **Policy management**: This element governs what is allowable and unallowable in an access transaction. That is, given the identity and attributes of the requestor, the attributes of the resource or object, and environmental conditions, a policy specifies what actions this user can perform on this object.
+
+**Identity Federation**
+Identity federation addresses two questions:
+  1. How do you trust identities of individuals from external organizations who need access to your systems?
+  2. How do you vouch for identities of individuals in your organization when they need to collaborate with external organizations?
+Identity federation is a term used to describe the technology, standards, policies, and processes that allow an organization to trust digital identities, identity attributes, and credentials created and issued by another organization. We will discuss identity federation in the following section.

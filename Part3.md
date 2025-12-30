@@ -308,6 +308,240 @@ Three ways to achieve this;
 
 ---
 
+### 8. Discuss the different types of malware and classify them according to propagation method and payload
+
+Malware can be classified into two broad categories:
+
+- based first on how it spreads or propagates to reach the desired targets
+- Then on the actions or payloads it performs once a target is reached
+
+#### Propagation (viruses, worms, trojans)
+
+**Viruses**
+- Piece of software that infects programs
+  - Modifies them to include a copy of the virus
+  - Replicate and then infect other executables
+  - Easily spread through computers, with the help of users that **share programs**
+- When attached to an executable program a virus can do anything that the program can do
+  - Executes secretely when the host program is run
+  - Especially effective if no access control is used (as in the first PCs)
+- Specific to operating system and hardware
+  - Takes advantage of thei details and weakness
+
+- Computer virus infections formed the majority of malware in the early personal computer era (around the '80s)
+  - The Brain virus in 1986, was one of the first to target MSDOS systems, and resulted in a significant number of infections for this time.
+  - programs shared on floppy disk make it easily spread
+- In modern OS, the use of tighter access controls reduces the efficacy of traditional viruses
+  - Hence viruses evolved in macrovirus
+  - Documents are easily modified and not protected as executables in OS
+- Currently, a viral mode of infection is one of several propagation mechanisms used by contemporary malware
+
+**Virus components**
+**Infection mechanism**
+  - Means by which a virus spreads or propagates
+  - Also referred to as the infection vector
+**Trigger**
+  - Event or condition that determines when the payload is activated or delivered
+  - Sometimes known as a logic bomb
+**Payload**
+  - What the virus does (besides spreading)
+  - May involve damage or benign but noticeable activity
+
+![1767101442217](image/Part3/1767101442217.png)
+
+**Macro and scripting viruses**
+
+- NISTIR 7298 defines a macro virus as:
+
+"a virus that attaches itself to documents and uses the macro programming capabilities of the document’s application to execute and propagate"
+
+- Macro viruses infect scripting code used to support active content in a variety of user document types
+- They are threatening for a number of reasons:
+  - They are platform independent
+  - Infect documents, not executable portions of code
+  - Are easily spread as the documents are normally shared, much more than programs
+  - Traditional file system access controls are of limited use in preventing their spread: they infect user documents that need to be modified by users …
+  - Are much easier to write or to modify than traditional executable viruses
+
+**Virus classification**
+
+![1767101614509](image/Part3/1767101614509.png)
+
+**Worms**
+
+- Program that actively seeks out more machines to infect Worms
+  - each infected machine serves as an automated launching pad for attacks on other machines
+  - exploits software vulnerabilities in client or server programs
+- Usually carries some form of payload
+  - Upon activation the payload may replicate and
+propagate the worm again
+- First known (non-malicious) implementation was done in Xerox Palo Alto Labs in the early 1980s
+
+**Worm replication**
+
+![1767101746175](image/Part3/1767101746175.png)
+
+A worm typically uses the same phases as a computer virus:
+- dormant, propagation, triggering, execution.
+
+The propagation phase generally performs the following functions:
+- Search for access mechanisms to other systems to infect
+(Scanning phase)
+- Scanning by examining local data:
+  - host tables, address books, buddy lists, trusted peers,… ;
+  - by scanning possible target host addresses;
+  - by searching for suitable removable media devices to use.
+- Transfer (and run) a copy of itself to the remote system
+
+The worm may to disguise its presence by naming itself as a system
+process
+  - Recent worms can even inject their code into existing processes on the system.
+
+**Target discovery**
+Scanning can be:
+- Random
+  - Probes random addresses in the IP address space using a different seed
+- This produces a high volume of Internet traffic which may cause
+generalized disruption even before the actual attack is launched
+- Hit-list
+  - First compiles a long list of potential vulnerable machines
+  - Then it begins infecting machines on the list
+  - Each infected machine is provided with a portion of the list to scan
+  - This results in a very short scanning period which may make it difficult to detect that infection is taking place
+- Topological
+  - Look for information on an infected victim machine to find more hosts to
+  scan
+- Local subnet
+  - If a host can be infected behind a firewall that host then looks for targets
+  - in its own local network
+  The host uses the subnet address struct
+
+- A well-designed worm (and a virus) can spread rapidly and infect massive numbers of hosts.
+- Computer viruses and worms exhibit similar self-replication and propagation behavior to biological viruses.
+
+![1767102117171](image/Part3/1767102117171.png)
+
+**Mobile code**
+
+- NIST SP 800-28 defines mobile code as:
+"programs that can be shipped unchanged to a heterogeneous collection of platforms and executed with identical semantics"
+
+- Mobile code transmitted from a remote system to a local system and then executed on the local system
+
+- Often acts as a mechanism for a virus, worm, or trojan horse
+- Takes advantage of vulnerabilities to perform its own exploits
+- Popular vehicles include:
+  - Java applets
+  - ActiveX
+  - JavaScript
+  - VBScript
+- Most common ways of using mobile code for malicious
+operations on local system are:
+  - Cross-site scripting
+  - Interactive and dynamic Web sites
+  - E-mail attachments
+  - Downloads from untrusted sites or of untrusted software
+
+---
+
+![1767102402606](image/Part3/1767102402606.png)
+
+![1767102418889](image/Part3/1767102418889.png)
+
+#### Payload
+
+**system corruption**
+- Real-world damage
+  - Causes damage to physical equipment
+    - Chernobyl virus also rewrites BIOS code
+  - Stuxnet worm
+    - Target specific industrial control system software
+  - There are concerns about using sophisticated targeted malware for industrial sabotage
+- Logic bomb
+  - Code embedded in the malware that is set to "explode" when certain conditions are met
+
+**Ransomware**
+- Infected a large number of systems in many countries in May 2017
+- It encrypted a large number of files and then demanded a ransom payment in Bitcoins to recover them
+- Targets widened beyond personal computer systems to include mobile devices and Linux servers
+- Use of tactics to put pressure on the victim to pay up:
+- threatening to publish sensitive personal information
+- permanently destroy the encryption key after a short period of time,…
+- Alternative recovery only with good backups and an appropriate incident response and disaster recovery plan
+
+**attack agent bots**
+- Takes over an internet-attached computer and uses that computer to launch or manage attacks
+- Botnet: collection of bots capable of acting in a coordinated manner
+- Uses:
+  - Distributed denial-of-service (DDoS) attacks
+  - Spamming
+  - Sniffing traffic
+  - Keylogging
+  - Spreading new malware
+  - Installing advertisement add-ons and browser helper objects (BHOs)
+  - Attacking IRC chat networks
+  - Manipulating online polls/games
+
+**Remote control facility**
+- Difference between a bot and a worm:
+  - Worm propagates itself and activates itself
+  - Bot is initially controlled from some central facility
+- Typical means of implementing the remote control facility is on an IRC server
+  - Bots join a specific channel on this server and treat incoming messages as commands
+  - More recent botnets use covert communication channels via protocols such as HTTP
+  - Distributed control mechanisms use peer-to-peer protocols to avoid a single point of failure
+
+**Information theft**
+- **Keyloggers**
+  - Captures keystrokes to allow attacker to monitor sensitive information
+  - Typically uses some form of filtering mechanism that only returns information close to keywords (“login”, “password”)
+- **Spyware**
+  - monitors a wide range of activities on the system
+  - E.g. web browsing
+- **Phishing**
+  - Exploits social engineering to leverage the user’s trust by masquerading as communication from a trusted source
+  - Include a URL in a spam e-mail that links to a fake Web site that mimics the login page of a banking, gaming, or similar site
+  - Suggests that urgent action is required by the user to authenticate their account
+  - Attacker exploits the account using the captured credentials
+- **Spear-phishing**
+  - Recipients are carefully researched by the attacker
+  - E-mail is crafted to specifically suit its recipient, often quoting a range of information to convince them of its authenticity
+
+**Stealthing backdoor**
+- Also known as a trapdoor
+- Secret entry point into a program allowing the attacker to gain access and bypass the security access procedures
+- Maintenance hook is a backdoor used by Programmers to debug and test programs
+- Difficult to implement operating system controls for backdoors in applications
+
+**Stealthing rootkit**
+- Set of hidden programs installed on a system to maintain covert access to that system
+- Hides by subverting the mechanisms that monitor and report on the processes, files, and registries on a computer
+- Gives administrator (or root) privileges to attacker
+  - Can add or change programs and files, monitor processes, send and receive network traffic, and get backdoor access on demand
+
+![1767103298671](image/Part3/1767103298671.png)
+
+### 8. Example stack frame with function calls
+
+![1767089285282](image/Part3/1767089285282.png)
+
+Function P calls function Q.
+The calling function P:
+  1. Pushes the parameters for the called function onto the stack (typically in reverse order of declaration)
+  2. Executes the call instruction to call the target function, which pushes the return address onto the stack
+
+The called function Q:
+  3. Pushes the current frame pointer value (which points to the calling routine’s stack frame) onto the stack
+  4. Sets the frame pointer to be the current stack pointer value (that is the address of the old frame pointer), which now identifies the new stack frame location for the called function
+  5. Allocates space for local variables by moving the stack pointer down to leave sufficient room for them
+  6. Runs the the body of the called function
+
+When the called function Q exits:
+  7. it first sets the stack pointer back to the value of the frame pointer (effectively discarding the space used by local variables)
+  8. Pops the old frame pointer value (restoring the link to the calling routine’s stack frame)
+  9. Executes the return instruction which pops the saved address off the stack and returns control to the calling function
+---
+
 ### 8. Figure 6.1 fgets buffer overflow
 
 ![1762253350786](image/Part3/1762253350786.png)
@@ -491,115 +725,6 @@ When a user-mode process executes a system call, the process refers to the syste
 - **Modify system call table targets**: The attacker overwrites selected legitimate system call routines with malicious code. The system call table is note changed.
 - **Redirect the system call table**: The attacker redirects references to the entire system call table to a new table in a new kernel memory location.
 
----
-
-#### Figure 6.7 Architecture of distributed IDS
-
-![1762353286224](image/Part3/1762353286224.png)
-
-The figure shows an example of distributed IDS architecture. The figure shows the overall architecture, which consists of three main components:
-
-1. **Host agent module**: An audit collection module operating as a background process on a monitored system. Its purpose is to collect data on security-related events on the host and transmit these to the central manager. The figure shows details of the agent module architecture.
-2. **LAN monitor agent module**: Operates in the same fashion as a host agent module except that it analyzes LAN traffic and reports the results to the central manager.
-3. **Central manager module**: Receives reports from LAN monitor and host agents and processors and correlates these reports to detect intrusion.
-
-The scheme is designed to be independent of any operating system or system auditing implementation.
----------------------------------------------------------------------------------------------------
-
-#### Figure 6.8 NIDS Sensor Deployment
-
-![1762354216148](image/Part3/1762354216148.png)
-
-Consider an organization with multiple sites, each of which has one or more LANs, with all of the networks interconnected via the Internet or some other WAN technology. For a comprehensive NIDS strategy, one or more sensors are needed at each site. Within a single site, a key decision for the security administrator is the placement of the sensors.
-
-The figure illustrates a number of possibilities. In general terms, this configuration is typical of larger organizations. All internet traffic passes through an external firewall that protects the entire facility. Traffic from the outside world, such as customers and vendors that need access to public services, such as Web and mail, is monitored. The external firewall also provides a degree of protection for those parts of the network that should be used to provide more specific protection to certain parts of the network.
-
-A common location for a NIDS sensor is just inside the external firewall (location 1 in the figure). This position has a number of advantages:
-
-- Sees attacks, originating from the outside world, that penetrate the network’s perimeter defenses (external firewall).
-- Highlights problems with the network firewall policy or performance.
-- Sees attacks that might target the Web server or ftp server.
-- Even if the incoming attack is not recognized, the IDS can sometimes recognize the outgoing traffic that results from the compromised server.
-
-Instead of placing a NIDS sensor inside the external firewall, the security administrator may choose to place a NIDS sensor between the external firewall and the internet or WAN (location 2). In this position, the sensor can monitor all network traffic, unfiltered. The advantages of this approache are as follows:
-
-- Documents **number** of attacks originating on the internet that target the network.
-- Documents **types** of attacks originating on the internet that target the network.
-
-A sensor at location 2 has a higher processing burden than any sensor located elsewhere on the site network.
-In addition to a sensor at the boundary of the network, on either side of the external firewall, the administrator may configure a firewall and one or more sensors to protect major backbone networks, such as those that support internal servers and database resources (location 3). The benefits of this placement include the following:
-
-- Monitors large amount of a network's traffic, thus increasing the possibility of spotting attacks.
-- Detects unauthorized activity by authorized users within the organization's security perimeter.
-
-Thus, a sensor at location 3 is able to monitor for both internal and external attacks. Because the sensor monitors traffic to only a subset of devices at the site, it can be tuned to specific protocols and attack types, thus reducing the processing burden.
-
-Finally, the network facilities at a site may include separate LANs that support user workstations and servers specific to a single department. The administrator could configure a firewall and NIDS sensor to provide additional protection for all of these networks or target the protection to critical subsystems, such as personnel and financial networks (location 4). A sensor used in this latter fashion provides the following benefits:
-
-- Detects attacks targeting critical systems and resources
-- Allows focusing of limited resources to the network assets considered of greatest value
-
-As with a sensor at location 3, a sensor at location 4 can be tuned to specific protocols and attack types, thus reducing the processing burden.
-
-#### Intrusion detection techniques for NIDS
-
-- **Attacks suitable for signature detection**:
-  - Application layer reconnaissance and attacks
-  - Transport layer reconnaissance and attacks
-  - Network layer reconnaissance and attacks
-  - Unexpected application services
-  - Policy violations
-
-**Attacks suitable for Anomaly detection**:
-
-- Denial-of-service (DoS) attacks
-- Scanning
-- Worms
-
----
-
-#### Figure 6.9 Honeypots deployment
-
-![1762356128064](image/Part3/1762356128064.png)
-
-Honeypots are decoy ("esche") systems designed to:
-
-- lure a potential attacker away from critical systems
-- collect information about the attacker's activity
-- encourage the attacker to stay on the system long enough for administrators to respond
-
-Systems are filled with fabricated information that a legitimate user of the system wouldn't access.
-Resources that have no production value:
-
-- Hence any incoming communication is most likely a probe, scan, or an attack
-- Initiated outbound communication suggests that the system has probably been compromised
-
-#### Honeypot Classifications
-
-Low interaction honeypot
-
-- Consists of a software package that emulates particular IT services or systems well enough to provide a realistic initial interaction, but does not execute a full version of those services or systems
-- Provides a less realistic target
-- Often sufficient for use as a component of a distributed IDS to warn of imminent attack
-
-High interaction honeypot
-
-- A real system, with a full operating system, services and applications, which are instrumented and deployed where they can be accessed by attackers
-- Is a more realistic target that may occupy an attacker for an extended period
-- However, it requires significantly more resources
-- If compromised could be used to initiate attacks on other systems
-
-#### Honeypot deployment
-
-Honeypots can be deployed in a variety of locations. The figure illustrates some possibilities. The location depends on a number of factors, such as the type of information the organization is interested in gathering and the level of risk that organizations can tolerate to obtain the maximum amount of data.
-
-A honeypot outside the external firewall (location 1) is useful for tracking attempts to connect to unused IP addresses within the scope of the network. A honeypot at this location does not increase the risk for the internal network. The danger of having a compromised system behind the firewall is avoided. Further, because the honeypot attracts many potential attacks, it reduces the alerts issued by the firewall and by internal IDS sensors, easing the management burden. The disadvantage of an external honeypot is that it has little or no ability to trap internal attackers, especially if the external firewall filters traffic in both directions.
-
-The network of externally available services, such as Web and mail, often called the DMZ (demilitarized zone), is another candidate for locating a honeypot (location 2). The security administrator must assure that the other systems in the DMZ are secure against any activity generated by the honeypot. A disadvantage of this location is that a typical DMZ is not fully accessible, and the firewall typically blocks traffic to the DMZ the attempts to access unneeded services. Thus, the firewall either has to open up the traffic beyond what is permissible, which is risky, or limit the effectiveness of the honeypot.
-
-A fully internal honeypot (location 3) has several advantages. Its most important advantage is that it can catch internal attacks. A honeypot at this location can also detect a misconfigured firewall that forwards impermissible traffic from the Internet to the internal network. There are several disadvantages. The most serious of these is if the honeypot is compromised so it can attack other internal systems. Any further traffic from the Internet to the attacker is not blocked by the firewall because it is regarded as traffic to the honeypot only. Another difficulty for this honeypot location is that, as with location 2, the firewall must adjust its filtering to allow traffic to the honeypot, thus complicating firewall configuration and potentially compromising the internal network.
-
-An emerging related technology is the use of honeyfiles, that emulate legitimate documents with realistic, enticing names and possibly content. These documents should not be accessed by legitimate users of a system, but rather act as bait for intruders exploring a system. Any access of them is assumed to be suspicious [WHIT13]. Appropriate generation, placement, and monitoring of honeyfiles is an area of current research.
 
 ---
 
